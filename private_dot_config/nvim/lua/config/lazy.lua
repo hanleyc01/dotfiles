@@ -58,7 +58,6 @@ vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3
 -- relative line numbering
 vim.wo.relativenumber = true
 
-
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
