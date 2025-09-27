@@ -1,3 +1,9 @@
+--[[
+-- Colortheme customization
+-- Created 9/27/2025
+-- + added daytime/nighttime cycle, which is modular
+--]]
+
 -- Set the colorscheme depending on the time of day.
 local function callback(daytime_name, nighttime_name)
     return function()

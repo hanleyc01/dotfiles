@@ -1,3 +1,8 @@
+--[[
+-- Statusline configuration
+-- created 09/27/2025
+--]]
+
 return {
     {
         "nvim-lualine/lualine.nvim",

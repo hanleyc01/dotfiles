@@ -1,3 +1,8 @@
+--[[
+-- nvim lsp-config configuration file
+-- created 09/27/2025
+--]]
+
 return {
     -- mason.nvim
     {
