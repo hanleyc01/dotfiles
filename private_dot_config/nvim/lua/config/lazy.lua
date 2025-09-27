@@ -53,6 +53,9 @@ opt.expandtab = true
 opt.termguicolors = true
 opt.background = "dark"
 
+-- relative line numbering
+vim.wo.relativenumber = true
+
 
 -- Setup lazy.nvim
 require("lazy").setup({
