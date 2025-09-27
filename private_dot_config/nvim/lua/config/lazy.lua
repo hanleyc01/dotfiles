@@ -53,6 +53,8 @@ opt.expandtab = true
 opt.termguicolors = true
 opt.background = "dark"
 
+vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3")
+
 -- relative line numbering
 vim.wo.relativenumber = true
 
@@ -61,14 +63,13 @@ vim.wo.relativenumber = true
 require("lazy").setup({
     spec = {
         -- Import your plugins
-        "neovim/nvim-lspconfig",
         { import = "plugins" },
     },
-    
+
     -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
-    -- install = { colorscheme = { "tokyonight-night" } },
-    
+    install = { colorscheme = { "tokyonight-night" } },
+
     -- Automatically check for plugin updates.
     checker = { enabled = true },
 })
