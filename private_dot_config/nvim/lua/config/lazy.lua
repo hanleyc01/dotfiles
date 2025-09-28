@@ -56,6 +56,8 @@ opt.shiftwidth = 4
 opt.expandtab = true
 opt.termguicolors = true
 opt.background = "dark"
+-- code completion
+vim.cmd[[set completeopt+=menuone,noselect,popup]]
 
 vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3")
 
