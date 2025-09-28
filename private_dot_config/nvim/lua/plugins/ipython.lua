@@ -59,6 +59,7 @@ return {
             "jmbuhr/otter.nvim",
             "nvim-treesitter/nvim-treesitter",
         },
+        priority = 900,
 
         init = function()
             local quarto = require("quarto")
@@ -99,5 +100,22 @@ return {
               runner.run_all(true)
             end, { desc = "run all cells of all languages", silent = true })
         end,
-    }
+    },
+
+    -- jupytext.nvim
+    {
+        "GCBallesteros/jupytext.nvim",
+        config = true,
+        opts = {
+            output_extension = "auto",
+            force_ft = nil,
+            custom_language_formatting = {
+                python = {
+                    extension = "qmd",
+                    style = "quarto",
+                    force_ft = "quarto",
+                },
+            },
+        },
+    },
 }

@@ -4,6 +4,10 @@
 -- Created 09/26/2025
 -- + added initialization script
 -- + added plugins/colorscheme.lua, set to `tokyonight-night`
+--
+-- Update 09/27/2025
+-- + added python3 vim, see: "/home/connorh/.venvs/neovim/bin/python3" for more details;
+--   on pull to new computer, make sure to reinitialize the venv
 --]]
 
 --
