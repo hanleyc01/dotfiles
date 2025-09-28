@@ -8,7 +8,7 @@
 local function callback(daytime_name, nighttime_name)
     return function()
         local current_hour = os.date("*t").hour
-        local is_nighttime = current_hour >= 15 or current_hour < 6
+        local is_nighttime = current_hour >= 17 or current_hour < 6
         if is_nighttime then
             vim.cmd("colorscheme " .. nighttime_name)
         else
