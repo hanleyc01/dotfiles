@@ -5,6 +5,10 @@
 --
 -- 09/28/2025
 -- + adding code completion
+--
+-- 09/30/2025
+-- + added type hints inline
+-- + added texlab
 --]]
 
 
@@ -34,6 +38,7 @@ return {
         lazy = false,
     },
 
+    -- Inline type hints
     {
         "chrisgrieser/nvim-lsp-endhints",
         event = "LspAttach",
@@ -48,6 +53,7 @@ return {
             vim.lsp.enable("basedpyright")
             vim.lsp.enable("ts_ls")
             vim.lsp.enable("clangd")
+            vim.lsp.enable("texlab")
 
             -- Show line diagnostics automatically in hover window
             vim.o.updatetime = 1000

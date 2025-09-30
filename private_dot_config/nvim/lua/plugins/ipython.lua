@@ -111,9 +111,9 @@ return {
             force_ft = nil,
             custom_language_formatting = {
                 python = {
-                    extension = "qmd",
-                    style = "quarto",
-                    force_ft = "quarto",
+                    extension = "md",
+                    style = "markdown",
+                    force_ft = "markdown",
                 },
             },
         },
