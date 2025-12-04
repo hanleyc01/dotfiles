@@ -4,7 +4,9 @@
 -- + added daytime/nighttime cycle, which is modular
 --]]
 
--- Set the colorscheme depending on the time of day.
+--- Set the colorscheme depending on the time of day.
+--- @param daytime_name string Name of the colorscheme to use during the day.
+--- @param nighttime_name string Name of the colorscheme to use during the night.
 local function callback(daytime_name, nighttime_name)
     return function()
         local current_hour = os.date("*t").hour

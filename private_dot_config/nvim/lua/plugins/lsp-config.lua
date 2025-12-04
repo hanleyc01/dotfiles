@@ -51,6 +51,18 @@ return {
         config = function()
             vim.lsp.enable("lua_ls")
             vim.lsp.enable("basedpyright")
+
+            -- based pyright settings
+            local basedpyright_config = {
+                analysis = {
+                diagnosticMode = "openFilesOnly",
+                inlayHints = {
+                  callArgumentNames = true
+                }
+              }
+            }
+            vim.lsp.config("basedpyright", basedpyright_config)
+
             vim.lsp.enable("ts_ls")
             vim.lsp.enable("clangd")
             vim.lsp.enable("texlab")

@@ -64,6 +64,19 @@ vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3
 -- relative line numbering
 vim.wo.relativenumber = true
 
+-- this is annoying: changing `.h` to be c rather than cpp
+-- not sure why it would ever be cpp, the proper header extension
+-- for cpp is `.hh` or `.hpp`.
+vim.api.nvim_create_autocmd(
+    "BufRead",
+    {
+        pattern = {"*.h"},
+        callback = function()
+            vim.api.nvim_buf_set_option(0, "filetype", "c")
+        end
+    }
+)
+
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
