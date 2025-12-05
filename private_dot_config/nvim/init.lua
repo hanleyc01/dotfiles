@@ -1,2 +1,2 @@
 -- Initialization of nvim package manager.
-require('config.lazy')
+require("config.lazy")

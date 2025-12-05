@@ -4,14 +4,17 @@
 --]]
 
 return {
-    {
-        dir = "~/Github-Projects/mary.nvim",
-        dev = true,
-        config = function()
-            local mary = require("mary")
-            mary.setup({
-                model = "test_model"
-            })
-        end
-    }
+	{
+		dir = "~/Github-Projects/mary.nvim",
+		dev = true,
+		config = function()
+			local mary = require("mary")
+			mary.setup({
+				model = "test_model",
+			})
+		end,
+		keys = {
+			{ "msq", "<cmd>'<,'>MarySendQuery<cr>", mode = "x" },
+		},
+	},
 }

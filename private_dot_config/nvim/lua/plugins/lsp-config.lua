@@ -9,120 +9,173 @@
 -- 09/30/2025
 -- + added type hints inline
 -- + added texlab
+--
+-- 12/05/2025
+-- + messing around with lua_ls support for `vim` and `plenary` globals
 --]]
 
-
 return {
-    -- mason.nvim
-    {
-        "mason-org/mason.nvim",
-        opts = {},
-    },
+	-- mason.nvim
+	{
+		"mason-org/mason.nvim",
+		opts = {},
+	},
 
-    -- mason-lspconfig
-    {
-        "mason-org/mason-lspconfig.nvim",
-        opts = {
-            ensure_installed = {
-                "lua_ls",
-                "basedpyright",
-                "ts_ls",
-                "clangd",
-            },
-        },
-    },
+	-- mason-lspconfig
+	{
+		"mason-org/mason-lspconfig.nvim",
+		opts = {
+			ensure_installed = {
+				"lua_ls",
+				"basedpyright",
+				"ts_ls",
+				"clangd",
+			},
+		},
+	},
 
-    {
-        "mrcjkb/rustaceanvim",
-        version = "^6",
-        lazy = false,
-    },
+	{
+		"mrcjkb/rustaceanvim",
+		version = "^6",
+		lazy = false,
+	},
 
-    -- Inline type hints
-    {
-        "chrisgrieser/nvim-lsp-endhints",
-        event = "LspAttach",
-        opts = {},
-    },
+	-- Inline type hints
+	{
+		"chrisgrieser/nvim-lsp-endhints",
+		event = "LspAttach",
+		opts = {},
+	},
 
-    -- nvim-lspconfig
-    {
-        "neovim/nvim-lspconfig",
-        config = function()
-            vim.lsp.enable("lua_ls")
-            vim.lsp.enable("basedpyright")
+	-- nvim-lspconfig
+	{
+		"neovim/nvim-lspconfig",
+		config = function()
+			-- lua_ls config
+			local lua_ls_config = {
+				on_init = function(client)
+					if client.workspace_folders then
+						local path = client.workspace_folders[1].name
+						if
+							path ~= vim.fn.stdpath("config")
+							and (
+								vim.uv.fs_stat(path .. "/.luarc.json")
+								or vim.uv.fs_stat(path .. "/.luarc.jsonc")
+							)
+						then
+							return
+						end
+					end
 
-            -- based pyright settings
-            local basedpyright_config = {
-                analysis = {
-                diagnosticMode = "openFilesOnly",
-                inlayHints = {
-                  callArgumentNames = true
-                }
-              }
-            }
-            vim.lsp.config("basedpyright", basedpyright_config)
+					client.config.settings.Lua = vim.tbl_deep_extend(
+						"force",
+						client.config.settings.Lua,
+						{
+							runtime = {
+								version = "LuaJIT",
+								path = {
+									"lua/?.lua",
+									"lua/?/init.lua",
+								},
+							},
+							workspace = {
+								checkThirdParty = false,
+								library = vim.api.nvim_get_runtime_file(
+									"",
+									true
+								),
+							},
+						}
+					)
+				end,
+				settings = {
+					Lua = {},
+				},
+			}
+			vim.lsp.config("lua_ls", lua_ls_config)
+			vim.lsp.enable("lua_ls")
 
-            vim.lsp.enable("ts_ls")
-            vim.lsp.enable("clangd")
-            vim.lsp.enable("texlab")
+			-- based pyright settings
+			local basedpyright_config = {
+				analysis = {
+					diagnosticMode = "openFilesOnly",
+					inlayHints = {
+						callArgumentNames = true,
+					},
+				},
+			}
+			vim.lsp.config("basedpyright", basedpyright_config)
+			vim.lsp.enable("basedpyright")
 
-            -- Show line diagnostics automatically in hover window
-            vim.o.updatetime = 1000
-            vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
-        end,
-    },
+			vim.lsp.enable("ts_ls")
+			vim.lsp.enable("clangd")
+			vim.lsp.enable("texlab")
 
-    -- code completion
-    {
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
-        dependencies = {
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-buffer",
-            "hrsh7th/cmp-path",
-        },
-        opts = function()
-            vim.lsp.config("*", { capabilities = require("cmp_nvim_lsp").default_capabilities() })
-            vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+			-- Show line diagnostics automatically in hover window
+			vim.o.updatetime = 1000
+			vim.cmd(
+				[[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+			)
+		end,
+	},
 
-            local cmp = require("cmp")
-            local defaults = require("cmp.config.default")()
-            local auto_select = true
-            return {
-                auto_brackets = {
-                    -- add filetypes with auto-brackets here
-                    "rust",
-                    "lua",
-                },
-                completion = {
-                    completeopt = "menu,menuone,noinsert" .. (auto_select and "" or ",noselect"),
-                },
-                preselect = auto_select and cmp.PreselectMode.Item or cmp.PreselectMode.None,
-                mapping = cmp.mapping.preset.insert({
-                    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-                    ['<Tab>'] = cmp.mapping.select_next_item(),
-                    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-                    ['<C-Space>'] = cmp.mapping.complete(),
-                    ['<C-e>'] = cmp.mapping.close(),
-                    ['<CR>'] = cmp.mapping.confirm({
-                      behavior = cmp.ConfirmBehavior.Insert,
-                      select = true,
-                    })
-                }),
-                sources = cmp.config.sources(
-                    {
-                        { name = "nvim_lsp" },
-                        { name = "path" },
-                    },
-                    {
-                        { name = "buffer" },
-                    }
-                ),
-                sorting = defaults.sorting,
-            }
-        end
-    },
+	-- code completion
+	{
+		"hrsh7th/nvim-cmp",
+		event = "InsertEnter",
+		dependencies = {
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+		},
+		opts = function()
+			vim.lsp.config(
+				"*",
+				{
+					capabilities = require("cmp_nvim_lsp").default_capabilities(),
+				}
+			)
+			vim.api.nvim_set_hl(
+				0,
+				"CmpGhostText",
+				{ link = "Comment", default = true }
+			)
+
+			local cmp = require("cmp")
+			local defaults = require("cmp.config.default")()
+			local auto_select = true
+			return {
+				auto_brackets = {
+					-- add filetypes with auto-brackets here
+					"rust",
+					"lua",
+				},
+				completion = {
+					completeopt = "menu,menuone,noinsert"
+						.. (auto_select and "" or ",noselect"),
+				},
+				preselect = auto_select and cmp.PreselectMode.Item
+					or cmp.PreselectMode.None,
+				mapping = cmp.mapping.preset.insert({
+					["<S-Tab>"] = cmp.mapping.select_prev_item(),
+					["<Tab>"] = cmp.mapping.select_next_item(),
+					["<C-d>"] = cmp.mapping.scroll_docs(-4),
+					["<C-f>"] = cmp.mapping.scroll_docs(4),
+					["<C-Space>"] = cmp.mapping.complete(),
+					["<C-e>"] = cmp.mapping.close(),
+					["<CR>"] = cmp.mapping.confirm({
+						behavior = cmp.ConfirmBehavior.Insert,
+						select = true,
+					}),
+				}),
+				sources = cmp.config.sources({
+					{ name = "nvim_lsp" },
+					{ name = "path" },
+				}, {
+					{ name = "buffer" },
+				}),
+				sorting = defaults.sorting,
+			}
+		end,
+	},
 }
-

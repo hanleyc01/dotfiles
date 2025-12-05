@@ -4,9 +4,9 @@
 --]]
 
 return {
-    {
-        "chomosuke/typst-preview.nvim",
-        lazy = false,
-        opts = {},
-    },
+	{
+		"chomosuke/typst-preview.nvim",
+		lazy = false,
+		opts = {},
+	},
 }
