@@ -8,6 +8,12 @@
 -- Update 09/27/2025
 -- + added python3 vim, see: "/home/connorh/.venvs/neovim/bin/python3" for more details;
 --   on pull to new computer, make sure to reinitialize the venv
+--
+-- Update 12/05/2025
+-- + added support for autoformatting rust files, as well as reading `*.h` files as c header files
+--
+-- Update 12/08/2025
+-- + autoformatting and import sorting for python files using ruff
 --]]
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -69,6 +75,24 @@ vim.api.nvim_create_autocmd("BufRead", {
 		vim.api.nvim_buf_set_option(0, "filetype", "c")
 	end,
 })
+
+-- format rust files on save
+vim.g.rustfmt_autosave = true
+
+-- format python files on autosave
+vim.api.nvim_create_augroup("AutoFormat", {})
+vim.api.nvim_create_autocmd(
+  "BufWritePost",
+  {
+    pattern = "*.py",
+    group = "AutoFormat",
+    callback = function()
+      vim.cmd [[silent !uv format --quiet]]
+      vim.cmd [[silent !uvx ruff check --select I --fix]]
+      vim.cmd [[edit]]
+    end
+  }
+)
 
 -- Set tab options for Lua files
 vim.api.nvim_create_autocmd("FileType", {

@@ -8,10 +8,7 @@ return {
 		dir = "~/Github-Projects/mary.nvim",
 		dev = true,
 		config = function()
-			local mary = require("mary")
-			mary.setup({
-				model = "test_model",
-			})
+      vim.g.mary_nvim_model = "test_model"
 		end,
 		keys = {
 			{ "msq", "<cmd>'<,'>MarySendQuery<cr>", mode = "x" },
