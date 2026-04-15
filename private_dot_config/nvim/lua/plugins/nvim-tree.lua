@@ -15,8 +15,8 @@ return {
 			require("nvim-tree").setup({})
 		end,
 		keys = {
-			{ "mt", "<cmd>NvimTreeToggle<cr>" },
-			{ "mf", "<cmd>NvimTreeFocus<cr>" },
+			{ "<localleader>mt", "<cmd>NvimTreeToggle<cr>", desc = "Toggle NvimTree" },
+			{ "<localleader>mf", "<cmd>NvimTreeFocus<cr>", desc = "Focus NvimTree" },
 		},
 	},
 }

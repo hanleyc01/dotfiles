@@ -30,6 +30,7 @@ return {
 				"basedpyright",
 				"ts_ls",
 				"clangd",
+				"gopls",
 			},
 		},
 	},
@@ -58,35 +59,25 @@ return {
 						local path = client.workspace_folders[1].name
 						if
 							path ~= vim.fn.stdpath("config")
-							and (
-								vim.uv.fs_stat(path .. "/.luarc.json")
-								or vim.uv.fs_stat(path .. "/.luarc.jsonc")
-							)
+							and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
 						then
 							return
 						end
 					end
 
-					client.config.settings.Lua = vim.tbl_deep_extend(
-						"force",
-						client.config.settings.Lua,
-						{
-							runtime = {
-								version = "LuaJIT",
-								path = {
-									"lua/?.lua",
-									"lua/?/init.lua",
-								},
+					client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+						runtime = {
+							version = "LuaJIT",
+							path = {
+								"lua/?.lua",
+								"lua/?/init.lua",
 							},
-							workspace = {
-								checkThirdParty = false,
-								library = vim.api.nvim_get_runtime_file(
-									"",
-									true
-								),
-							},
-						}
-					)
+						},
+						workspace = {
+							checkThirdParty = false,
+							library = vim.api.nvim_get_runtime_file("", true),
+						},
+					})
 				end,
 				settings = {
 					Lua = {},
@@ -110,12 +101,11 @@ return {
 			vim.lsp.enable("ts_ls")
 			vim.lsp.enable("clangd")
 			vim.lsp.enable("texlab")
+			vim.lsp.enable("gopls")
 
 			-- Show line diagnostics automatically in hover window
 			vim.o.updatetime = 1000
-			vim.cmd(
-				[[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
-			)
+			vim.cmd([[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]])
 		end,
 	},
 
@@ -129,17 +119,10 @@ return {
 			"hrsh7th/cmp-path",
 		},
 		opts = function()
-			vim.lsp.config(
-				"*",
-				{
-					capabilities = require("cmp_nvim_lsp").default_capabilities(),
-				}
-			)
-			vim.api.nvim_set_hl(
-				0,
-				"CmpGhostText",
-				{ link = "Comment", default = true }
-			)
+			vim.lsp.config("*", {
+				capabilities = require("cmp_nvim_lsp").default_capabilities(),
+			})
+			vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 			local cmp = require("cmp")
 			local defaults = require("cmp.config.default")()
@@ -151,11 +134,9 @@ return {
 					"lua",
 				},
 				completion = {
-					completeopt = "menu,menuone,noinsert"
-						.. (auto_select and "" or ",noselect"),
+					completeopt = "menu,menuone,noinsert" .. (auto_select and "" or ",noselect"),
 				},
-				preselect = auto_select and cmp.PreselectMode.Item
-					or cmp.PreselectMode.None,
+				preselect = auto_select and cmp.PreselectMode.Item or cmp.PreselectMode.None,
 				mapping = cmp.mapping.preset.insert({
 					["<S-Tab>"] = cmp.mapping.select_prev_item(),
 					["<Tab>"] = cmp.mapping.select_next_item(),

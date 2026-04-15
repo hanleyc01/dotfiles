@@ -4,16 +4,16 @@
 --]]
 
 return {
-  {
-    "NeogitOrg/neogit",
-    lazy = true,
-    dependencies = {
-      "nvim-lua/plenary.nvim",         -- required
-      "sindrets/diffview.nvim",        -- optional - Diff integration
-    },
-    cmd = "Neogit",
-    keys = {
-      { "gG", "<cmd>Neogit<cr>", mode = "n", desc = "Show Neogit UI" }
-    }
-  }
+	{
+		"NeogitOrg/neogit",
+		lazy = true,
+		dependencies = {
+			"nvim-lua/plenary.nvim", -- required
+			"sindrets/diffview.nvim", -- optional - Diff integration
+		},
+		cmd = "Neogit",
+		keys = {
+			{ "gG", "<cmd>Neogit<cr>", mode = "n", desc = "Show Neogit UI" },
+		},
+	},
 }

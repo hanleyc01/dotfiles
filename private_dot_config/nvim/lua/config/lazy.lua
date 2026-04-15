@@ -60,8 +60,7 @@ opt.background = "dark"
 -- code completion
 vim.cmd([[set completeopt+=menuone,noselect,popup]])
 
-vim.g.python3_host_prog =
-	vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3")
+vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3")
 
 -- relative line numbering
 vim.wo.relativenumber = true
@@ -81,18 +80,15 @@ vim.g.rustfmt_autosave = true
 
 -- format python files on autosave
 vim.api.nvim_create_augroup("AutoFormat", {})
-vim.api.nvim_create_autocmd(
-  "BufWritePost",
-  {
-    pattern = "*.py",
-    group = "AutoFormat",
-    callback = function()
-      vim.cmd [[silent !uv format --quiet]]
-      vim.cmd [[silent !uvx ruff check --select I --fix]]
-      vim.cmd [[edit]]
-    end
-  }
-)
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = "*.py",
+	group = "AutoFormat",
+	callback = function()
+		vim.cmd([[silent !uv format --quiet]])
+		vim.cmd([[silent !uvx ruff check --select I --fix]])
+		vim.cmd([[edit]])
+	end,
+})
 
 -- Set tab options for Lua files
 vim.api.nvim_create_autocmd("FileType", {
