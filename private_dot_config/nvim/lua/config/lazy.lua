@@ -60,7 +60,7 @@ opt.background = "dark"
 -- code completion
 vim.cmd([[set completeopt+=menuone,noselect,popup]])
 
-vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3")
+-- vim.g.python3_host_prog = vim.fn.expand("/home/connorh/.venvs/neovim/bin/python3")
 
 -- relative line numbering
 vim.wo.relativenumber = true

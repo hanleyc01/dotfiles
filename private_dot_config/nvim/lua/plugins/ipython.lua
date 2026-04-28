@@ -12,7 +12,7 @@ return {
 	-- molten.nvim
 	{
 		"benlubas/molten-nvim",
-		dependencies = { "3rd/image.nvim" },
+		dependencies = { "3rd/image.nvim", "nvim-treesitter" },
 		build = ":UpdateRemotePlugins",
 		priority = 1000,
 		init = function()
@@ -91,7 +91,7 @@ return {
 		},
 		priority = 900,
 
-		init = function()
+		config = function()
 			local quarto = require("quarto")
 			quarto.setup({
 				lspFeatures = {
