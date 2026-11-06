@@ -12,6 +12,12 @@
 --
 -- 12/05/2025
 -- + messing around with lua_ls support for `vim` and `plenary` globals
+--
+-- 10/16/2026
+-- + added support for teal_ls
+--
+-- 10/26/2026
+-- + fixed teal_ls server name in vim.lsp.enable (was "teal-language-server")
 --]]
 
 return {
@@ -102,6 +108,8 @@ return {
 			vim.lsp.enable("clangd")
 			vim.lsp.enable("texlab")
 			vim.lsp.enable("gopls")
+      vim.lsp.enable("elmls")
+      vim.lsp.enable("teal_ls")
 
 			-- Show line diagnostics automatically in hover window
 			vim.o.updatetime = 1000

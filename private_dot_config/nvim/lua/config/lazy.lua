@@ -14,6 +14,9 @@
 --
 -- Update 12/08/2025
 -- + autoformatting and import sorting for python files using ruff
+--
+-- Update 10/26/2026
+-- + teal files use the same 2-space indentation as lua
 --]]
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -90,9 +93,29 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 })
 
--- Set tab options for Lua files
+-- format elm files on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = "*.elm",
+	group = "AutoFormat",
+	callback = function()
+    vim.cmd("silent !elm-format --yes " .. vim.fn.expand("%:p"))
+		vim.cmd([[edit]])
+	end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*.tex",
+  group = "AutoFormat",
+  callback = function()
+    vim.cmd([[silent !tex-fmt ]] .. vim.fn.expand("%:p"))
+    vim.cmd([[edit]])
+  end,
+})
+
+
+-- Set tab options for Lua (and Teal) files
 vim.api.nvim_create_autocmd("FileType", {
-	pattern = "lua",
+	pattern = { "lua", "teal" },
 	callback = function()
 		vim.opt.tabstop = 2 -- Number of spaces a tab counts for
 		vim.opt.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
